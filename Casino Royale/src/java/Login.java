@@ -1,17 +1,19 @@
-package Slots;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Abhishek Karan, Shreyas Hebbar, Elvis D'Souza
+ * @author Abhishek Karan
  */
-public class slotsServlet extends HttpServlet {
+public class Login extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,29 +32,14 @@ public class slotsServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet slotsServlet</title>");
+            out.println("<title>Servlet Login</title>");
             out.println("</head>");
             out.println("<body>");
+            String uname = request.getParameter("uname");
+            out.println(uname);
 
-            int num1 = 64 + (int) (Math.floor(Math.random() * 26) + 1);
-            int num2 = 64 + (int) (Math.floor(Math.random() * 26) + 1);
-            int num3 = 64 + (int) (Math.floor(Math.random() * 26) + 1);
-            out.println("num1: " + num1 + " num2: " + num2 + " num3: " + num3);
-            char n1 = (char) num1;
-            char n2 = (char) num2;
-            char n3 = (char) num3;
-            out.println("<br/>Char1: " + n1 + " Char2: " + n2 + " Char3: " + n3);
-            String randomStr = "" + n1 + n2 + n3;
-            out.println("<br/>Random Str: " + randomStr);
-
-            if (randomStr.equals("ICT") || randomStr.equals("SNP") || randomStr.equals("XXX") || randomStr.equals("AJP") || randomStr.equals("NHP")) {
-                out.println("<br/>You WON!");
-            } else {
-                out.println("<br/>You Lost!");
-            }
-
-            out.println("<br/><a href='index.html'>Go Home</a>");
-
+            RequestDispatcher rd = request.getRequestDispatcher("Selector.jsp");
+            rd.forward(request, response);
             out.println("</body>");
             out.println("</html>");
         }

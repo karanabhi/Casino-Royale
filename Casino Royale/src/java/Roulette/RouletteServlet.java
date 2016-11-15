@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Abhishek Karan
+ * @author Abhishek Karan, Shreyas Hebbar, Elvis D'Souza
  */
 public class RouletteServlet extends HttpServlet {
 
@@ -33,7 +33,7 @@ public class RouletteServlet extends HttpServlet {
             out.println("<title>RouletteServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            
+
             double num1 = Math.floor(Math.random() * 10) + 1;
             String randomNumber = String.valueOf((int) num1);
             String unum = request.getParameter("unum");
@@ -43,8 +43,8 @@ public class RouletteServlet extends HttpServlet {
             } else {
                 out.println("<br/>You Lost!");
             }
-            
-            out.println("<br/><a href='Roulette_html.html'>Go Home</a>");
+
+            out.println("<br/><a href='index.html'>Go Home</a>");
             out.println("</body>");
             out.println("</html>");
         }
