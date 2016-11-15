@@ -1,13 +1,13 @@
 
+import DataAccess.DataAccessTemplate;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -36,10 +36,18 @@ public class Login extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             String uname = request.getParameter("uname");
-            out.println(uname);
+            //out.println(uname);
 
-            RequestDispatcher rd = request.getRequestDispatcher("Selector.jsp");
-            rd.forward(request, response);
+            ApplicationContext contx = new ClassPathXmlApplicationContext("Beans.xml");
+            DataAccessTemplate dat = (DataAccessTemplate) contx.getBean("casinoJDBCTemplate");
+
+            int stat = dat.insert(uname);
+            if (stat == 1) {
+                response.sendRedirect("Selector.jsp");
+            } else {
+                out.println("<br/>Something went wrong...Please Try Again");
+            }
+
             out.println("</body>");
             out.println("</html>");
         }

@@ -4,6 +4,11 @@
     Author     : Abhishek Karan
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="CasinoPOJO.Casino"%>
+<%@page import="org.springframework.context.support.ClassPathXmlApplicationContext"%>
+<%@page import="DataAccess.DataAccessTemplate"%>
+<%@page import="org.springframework.context.ApplicationContext"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -37,20 +42,34 @@
                     Timestamp
                 </th>
             </tr>
-            <tr>
+
+
+            <%
+                int x = 1;
+
+                ApplicationContext contx = new ClassPathXmlApplicationContext("Beans.xml");
+                DataAccessTemplate dat = (DataAccessTemplate) contx.getBean("casinoJDBCTemplate");
+
+                List<Casino> lst = dat.getLeaderboardData();
+                for (Casino c : lst) {
+            %>
+            <tr>            
                 <td>
-                    2
+                    <%=x++%>
                 </td>
                 <td>
-                    ABC
+                    <%=c.getUname()%>
                 </td>
                 <td>
-                    123
+                    <%=c.getPoints()%>
                 </td>
                 <td>
-                    123dsf12
+                    <%=c.getTimestamp()%>
                 </td>
             </tr>
+            <%
+                }//for-loop
+%>
         </table>
 
     </body>

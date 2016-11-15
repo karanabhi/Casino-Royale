@@ -17,7 +17,7 @@
     </bean>
     
     <!-- Definition for JDBCTemplate bean-->
-    <bean id="bankJDBCTemplate" class="DataAccess.DataAccessTemplate">
+    <bean id="casinoJDBCTemplate" class="DataAccess.DataAccessTemplate">
         <property name="jdbcTemplateObject" ref="jdbcTemplate"/>
     </bean>    
 </beans>
