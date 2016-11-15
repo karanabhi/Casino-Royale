@@ -1,11 +1,14 @@
 
+import CasinoPOJO.Casino;
 import DataAccess.DataAccessTemplate;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -39,10 +42,23 @@ public class Login extends HttpServlet {
             String uname = request.getParameter("uname");
             TCPClient tcpClient = new TCPClient(uname);
             String stat = tcpClient.runCLient();
-            if (stat.equals("1")) {
-                response.sendRedirect("Selector.jsp");
-            } else {
+            //out.println("gggg:   " + stat + "     :aaaa");
+            if (stat.equals("0")) {
                 out.println("<br/>Something went wrong...Please Try Again");
+            } else {
+                HttpSession session = request.getSession(true);
+                session.setAttribute("u_id", stat);
+
+                ApplicationContext contx = new ClassPathXmlApplicationContext("Beans.xml");
+                DataAccessTemplate dat = (DataAccessTemplate) contx.getBean("casinoJDBCTemplate");
+
+                List<Casino> lst = dat.getPoints(stat);
+                for (Casino c : lst) {
+                    session.setAttribute("u_points", c.getPoints());
+                    // out.println("Session:" + c.getPoints());
+                }
+                //out.println("Session:" + session.getAttribute("u_points"));
+                response.sendRedirect("Selector.jsp");
             }
 
 //STARTTTTTTTTTTTTTTTTTTT            

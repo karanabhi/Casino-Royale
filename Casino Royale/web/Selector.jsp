@@ -69,8 +69,17 @@
             </tr>
             <%
                 }//for-loop
-%>
+
+            %>
         </table>
+        <br/><br/><br/>
+        Points:<%=session.getAttribute("u_points").toString()%>
+        <%//IF NEEDED
+            //    session.invalidate();
+        %>
+
+
+
 
     </body>
 </html>

@@ -2,7 +2,6 @@
 import DataAccess.DataAccessTemplate;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import static java.lang.System.out;
 import java.net.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

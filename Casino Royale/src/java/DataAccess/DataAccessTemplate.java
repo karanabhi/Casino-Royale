@@ -2,8 +2,16 @@ package DataAccess;
 
 import CasinoPOJO.Casino;
 import Mappers.LeaderboardMapper;
+import Mappers.PointsMapper;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 /**
  *
@@ -24,40 +32,50 @@ public class DataAccessTemplate {
         query = "select name,points,timestamp from leaderboard order by points DESC,timestamp ASC LIMIT 5";
         return jdbcTemplateObject.query(query, new LeaderboardMapper());
 
-    }//login()
+    }//getLeaderboardData()
 
-    public int insert(String name) {
+    public int insert(final String name) {
 
         query = "insert into leaderboard(name) values(?)";
-        return jdbcTemplateObject.update(query, new Object[]{name});
+        //PreparedStatement pstmt=
+        KeyHolder holder = new GeneratedKeyHolder();
+        //return jdbcTemplateObject.update(query, new Object[]{name});
+        int x = jdbcTemplateObject.update(new PreparedStatementCreator() {
+
+            @Override
+            public PreparedStatement createPreparedStatement(Connection connection)
+                    throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, name);
+                return ps;
+            }
+        }, holder);
+        if (x == 1) {
+            return holder.getKey().intValue();
+        }
+        return 0;
 
     }//insert()
-/*
-     public List<Bank> checkAccNo(Bank bank) {
 
-     query = "select uid from bank_user where account_no=? ";
-     return jdbcTemplateObject.query(query, new Object[]{bank.getAccount_number()}, new CheckMapper());
+    public int updatePoint(int points, String id) {
 
-     }//checkAccno()
+        query = "update leaderboard set points=(points+?) where _id=?";
+        //if (stat == 'G') {
+        return jdbcTemplateObject.update(query, new Object[]{points, id});
+        //} else if (stat == 'F') {
+        //  return jdbcTemplateObject.update(query, new Object[]{0, bank.getAccount_number()});
+        //}
+        //return 0;
+    }//UpdatePoint()
 
-     public List<Bank> checkUname(Bank bank) {
+    public List<Casino> getPoints(String id) {
 
-     query = "select uid from bank_user where uname=? ";
-     return jdbcTemplateObject.query(query, new Object[]{bank.getUsername()}, new CheckMapper());
+        query = "select points from leaderboard where _id=? LIMIT 1";
+        return jdbcTemplateObject.query(query, new Object[]{id}, new PointsMapper());
 
-     }//checkUname()
+    }//getLeaderboardData()
 
-     public int updateAdmin(Bank bank, char stat) {
-
-     query = "update bank_user set status=? where account_no=?";
-     if (stat == 'G') {
-     return jdbcTemplateObject.update(query, new Object[]{1, bank.getAccount_number()});
-     } else if (stat == 'F') {
-     return jdbcTemplateObject.update(query, new Object[]{0, bank.getAccount_number()});
-     }
-     return 0;
-     }//UpdateAdmin()
-
+    /*
      public List<Bank> fetchpayTrans(Bank bank, String pay) {
      query = "select bt.amount,bu.uname,bt.timestamp from bank_trans bt,bank_user bu "
      + "where bt.payer=bu.uid and " + pay + "=? ";
