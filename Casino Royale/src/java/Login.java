@@ -35,19 +35,30 @@ public class Login extends HttpServlet {
             out.println("<title>Servlet Login</title>");
             out.println("</head>");
             out.println("<body>");
+
             String uname = request.getParameter("uname");
-            //out.println(uname);
-
-            ApplicationContext contx = new ClassPathXmlApplicationContext("Beans.xml");
-            DataAccessTemplate dat = (DataAccessTemplate) contx.getBean("casinoJDBCTemplate");
-
-            int stat = dat.insert(uname);
-            if (stat == 1) {
+            TCPClient tcpClient = new TCPClient(uname);
+            String stat = tcpClient.runCLient();
+            if (stat.equals("1")) {
                 response.sendRedirect("Selector.jsp");
             } else {
                 out.println("<br/>Something went wrong...Please Try Again");
             }
 
+//STARTTTTTTTTTTTTTTTTTTT            
+            /*String uname = request.getParameter("uname");
+             //out.println(uname);
+
+             ApplicationContext contx = new ClassPathXmlApplicationContext("Beans.xml");
+             DataAccessTemplate dat = (DataAccessTemplate) contx.getBean("casinoJDBCTemplate");
+
+             int stat = dat.insert(uname);
+             if (stat == 1) {
+             response.sendRedirect("Selector.jsp");
+             } else {
+             out.println("<br/>Something went wrong...Please Try Again");
+             }*/
+//ENDDDDDDDDDDDDDDDDDd
             out.println("</body>");
             out.println("</html>");
         }

@@ -21,7 +21,7 @@ public class DataAccessTemplate {
 
     public List<Casino> getLeaderboardData() {
 
-        query = "select name,points,timestamp from leaderboard order by points DESC LIMIT 5";
+        query = "select name,points,timestamp from leaderboard order by points DESC,timestamp ASC LIMIT 5";
         return jdbcTemplateObject.query(query, new LeaderboardMapper());
 
     }//login()
