@@ -61,7 +61,7 @@ public class slotsServlet extends HttpServlet {
 
             String SLOT;
             HttpSession session = request.getSession(true);
-            int pts = Integer.parseInt(session.getAttribute("u_points").toString()), i;
+            int pts, i;
             pts = -10;
             String[] dic = {"AJP", "ICT", "ANK", "SNP", "SHA", "ELD", "ABK", "ILU", "LOL", "FTW", "WTF", "WTH", "MIT", "KMC", "FCK", "KFC", "MCD", "LTD", "LAB", "CCE", "ECE", "ITB", "IIT", "JEE", "BBT", "GOT", "DBZ", "PKM", "CCD", "CTF", "TCS", "ACC", "SEX", "ASS", "FML", "DEV", "GIT", "CSS", "JSP", "HOD", "DJT", "DOG", "CAT", "RAT", "TST", "XML", "UTF", "TXT", "WIN", "JAR"};
 
@@ -96,10 +96,19 @@ public class slotsServlet extends HttpServlet {
 
             ApplicationContext contx = new ClassPathXmlApplicationContext("Beans.xml");
             DataAccessTemplate dat = (DataAccessTemplate) contx.getBean("casinoJDBCTemplate");
+            if (pts < 0) {
+                session.setAttribute("u_stat", "You LOST!!!");
+            } else {
+                session.setAttribute("u_stat", "You WIN!");
+            }
+            pts += Integer.parseInt(session.getAttribute("u_points").toString());
             int stat = dat.updatePoint(pts, session.getAttribute("u_id").toString());
             if (stat == 1) {
+                //out.println("" + Integer.parseInt(session.getAttribute("u_points").toString()));
+                //out.println("" + pts);                
                 session.setAttribute("u_points", pts);
                 session.setAttribute("strs", SLOT);
+                //out.println("ttt:  " + SLOT + ":yolo");
                 response.sendRedirect("Slots.jsp");
             } else {
                 out.println("Something went wrong...try again!");

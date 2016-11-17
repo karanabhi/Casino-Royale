@@ -37,10 +37,7 @@
                 </th>
                 <th>
                     Points
-                </th>
-                <th>
-                    Timestamp
-                </th>
+                </th>               
             </tr>
 
 
@@ -62,10 +59,7 @@
                 </td>
                 <td>
                     <%=c.getPoints()%>
-                </td>
-                <td>
-                    <%=c.getTimestamp()%>
-                </td>
+                </td>                
             </tr>
             <%
                 }//for-loop

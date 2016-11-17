@@ -60,7 +60,7 @@
             </center>
         </div>
         <script type="text/javascript">
-            
+
             text = '<%=session.getAttribute("strs")%>';  // The message displayed
             chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';  // All possible Charactrers
             scale = 50;  // Font size and overall scale
@@ -68,41 +68,41 @@
             endSpeed = 0.05;  // Speed at which the letter stops
             firstLetter = 220;  // Number of frames untill the first letter stopps (60 frames per second)
             delay = 40;  // Number of frames between letters stopping
-            
-            
-            
+
+
+
             canvas = document.querySelector('canvas');
             ctx = canvas.getContext('2d');
-            
+
             text = text.split('');
             chars = chars.split('');
             charMap = [];
             offset = [];
             offsetV = [];
-            
+
             for (var i = 0; i < chars.length; i++) {
                 charMap[chars[i]] = i;
             }
-            
+
             for (var i = 0; i < text.length; i++) {
                 var f = firstLetter + delay * i;
                 offsetV[i] = endSpeed + breaks * f;
                 offset[i] = -(1 + f) * (breaks * f + 2 * endSpeed) / 2;
             }
-            
+
             (onresize = function () {
                 canvas.width = canvas.clientWidth;
                 canvas.height = canvas.clientHeight;
             })();
-            
+
             //------------ print once
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.globalAlpha = 1;
             ctx.fillStyle = '#622';
             ctx.fillRect(0, (canvas.height - scale) / 2, canvas.width, scale);
-            
-            
+
+
             for (var i = 0; i < text.length; i++) {
                 ctx.fillStyle = '#ccc';
                 ctx.textBaseline = 'middle';
@@ -130,8 +130,8 @@
                     offsetV[i] = 0;
                 }
             }
-            
-            
+
+
             //-------------end : print once
             function run() {
                 requestAnimationFrame(loop = function () {
@@ -170,7 +170,7 @@
                     requestAnimationFrame(loop);
                 });
                 window.setTimeout(function () {
-                    window.location.href = "Selector.jsp/"
+                    window.location.href = "Selector.jsp"
                 }, 9000);
             }
             document.getElementById("pull").addEventListener("click", run);

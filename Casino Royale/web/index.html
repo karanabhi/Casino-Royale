@@ -2,18 +2,71 @@
 
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Casino Royale</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div>Login</div>
+        <style type="text/css">
+            body
+            {
+                background: #111;
+            }
+            input[type=text], textarea {
+                -webkit-transition: all 0.30s ease-in-out;
+                -moz-transition: all 0.30s ease-in-out;
+                -ms-transition: all 0.30s ease-in-out;
+                -o-transition: all 0.30s ease-in-out;
+                outline: none;
+                padding: 3px 0px 3px 3px;
+                margin: 5px 1px 3px 0px;
+                border: 1px solid #DDDDDD;
+                border-radius: 4px;
+                height:50px;
+                font-size:14pt;
+            }
 
-        <form action="login" method="post">
-            Enter Name:<input type="text" name="uname" />
-            <input type="submit" name="submit" value="Login"/>
+            input[type=text]:focus, textarea:focus {
+                box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+                padding: 3px 0px 3px 3px;
+                margin: 5px 1px 3px 0px;
+                border: 1px solid rgba(81, 203, 238, 1);
+            }
+            input[type=submit] {
+                background: #17177a;
+                background-image: -webkit-linear-gradient(top, #17177a, #1f72a6);
+                background-image: -moz-linear-gradient(top, #17177a, #1f72a6);
+                background-image: -ms-linear-gradient(top, #17177a, #1f72a6);
+                background-image: -o-linear-gradient(top, #17177a, #1f72a6);
+                background-image: linear-gradient(to bottom, #17177a, #1f72a6);
+                -webkit-border-radius: 6;
+                -moz-border-radius: 6;
+                border-radius: 6px;
+                font-family: Arial;
+                color: #ffffff;
+                font-size: 20px;
+                padding: 10px 20px 10px 20px;
+                text-decoration: none;
+            }
+
+            input[type=submit]:hover {
+                background: #0c466b;
+                background-image: -webkit-linear-gradient(top, #0c466b, #3498db);
+                background-image: -moz-linear-gradient(top, #0c466b, #3498db);
+                background-image: -ms-linear-gradient(top, #0c466b, #3498db);
+                background-image: -o-linear-gradient(top, #0c466b, #3498db);
+                background-image: linear-gradient(to bottom, #0c466b, #3498db);
+                text-decoration: none;
+            }
+        </style>
+        <form action='login' method='post'>
+            <div style="margin:20%;">
+                <center>
+                    <div style="font-family:helvetica;color:rgba(255,255,255,0.8);font-size:60px;">CASINO<br>ROYALE</div><br>
+                    <input type="text" placeholder="Username" name="uname">
+                    <input type="submit" value="Let's ROLL!">
+                </center>
+            </div>
         </form>
-
-
     </body>
 </html>
