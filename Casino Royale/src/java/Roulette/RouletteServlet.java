@@ -1,11 +1,15 @@
 package Roulette;
 
+import DataAccess.DataAccessTemplate;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -34,23 +38,54 @@ public class RouletteServlet extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
 
-            double num1 = Math.floor(Math.random() * 10) + 1;
-            String randomNumber = String.valueOf((int) num1);
-            String unum = request.getParameter("unum");
-            out.println("Random Number: " + randomNumber + "<br/>User Number:" + unum);
-            if (randomNumber.equals(unum)) {
-                out.println("<br/>You WON!");
-            } else {
-                out.println("<br/>You Lost!");
-            }
+            HttpSession session = request.getSession(true);
 
-            out.println("<br/><a href='index.html'>Go Home</a>");
+            /*double num1 = Math.floor(Math.random() * 10) + 1;
+             String randomNumber = String.valueOf((int) num1);
+             String unum = request.getParameter("unum");
+             out.println("Random Number: " + randomNumber + "<br/>User Number:" + unum);
+             if (randomNumber.equals(unum)) {
+             out.println("<br/>You WON!");
+             } else {
+             out.println("<br/>You Lost!");
+             }
+             */
+            String res = request.getParameter("res");
+            int bet = Integer.parseInt(request.getParameter("bet"));
+            int points = Integer.parseInt(session.getAttribute("u_points").toString());
+            if (bet > points) {
+                session.setAttribute("u_stat", "Bet amount > Current Pot!");
+                response.sendRedirect("Selector.jsp");
+            } else {
+                if (res.equals("yes")) {
+                    points += bet * 2;
+                } else {
+                    points -= bet;
+                }
+
+                ApplicationContext contx = new ClassPathXmlApplicationContext("Beans.xml");
+                DataAccessTemplate dat = (DataAccessTemplate) contx.getBean("casinoJDBCTemplate");
+                int stat = dat.updatePoint(points, session.getAttribute("u_id").toString());
+                if (stat == 1) {
+                    session.setAttribute("u_points", points);
+                    if (res.equals("yes")) {
+                        session.setAttribute("u_stat", "You WIN!");
+                    } else {
+                        session.setAttribute("u_stat", "You LOST!!!");
+                    }
+                    response.sendRedirect("Selector.jsp");
+                } else {
+                    out.println("Something went wrong...try again!");
+                }
+            }
+            //out.println(res + " :yolo: " + bet + "::" + points);
+            //out.println("<br/><a href='Selector.jsp'>Go Home</a>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

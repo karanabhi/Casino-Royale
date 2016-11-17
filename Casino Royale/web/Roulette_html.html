@@ -1,18 +1,216 @@
-<!DOCTYPE html>
-
 <html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
     <body>
-        <div>Roulette</div>
-        <form action="Roulette" method="post">
-            Enter Number:<input type="text" name="unum"/>
-            <input type="submit" name="submit" value="Roulette"/>
-        </form>
+    <center style="font-size:100;">
+        <input type="number" placeholder="Guess" min="0" max="10" id="guess" class="style-5"/>
+        <input type="number" placeholder="Bet amount" min="0" id="bet"/>
+        <input type="button" value="spin" id='spin' /><br/>
+        <canvas id="canvas" width="500" height="500"></canvas>
+    </center>
+    <form method="get" action="">
+        <input type="hidden" id="result"/>
+        <input type="hidden" id="amount"/>
+    </form>
+    <script type="text/javascript">
+        var options = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
+        var startAngle = 0;
+        var arc = Math.PI / (options.length / 2);
+        var spinTimeout = null;
 
-    </body>
+        var spinArcStart = 10;
+        var spinTime = 0;
+        var spinTimeTotal = 0;
+
+        var result;
+        var bet;
+
+        var ctx;
+
+        document.getElementById("spin").addEventListener("click", spin);
+
+        function byte2Hex(n) {
+            var nybHexString = "0123456789ABCDEF";
+            return String(nybHexString.substr((n >> 4) & 0x0F, 1)) + nybHexString.substr(n & 0x0F, 1);
+        }
+
+        function RGB2Color(r, g, b) {
+            return '#' + byte2Hex(r) + byte2Hex(g) + byte2Hex(b);
+        }
+
+        function getColor(item, maxitem) {
+            var phase = 0;
+            var center = 128;
+            var width = 127;
+            var frequency = Math.PI * 2 / maxitem;
+
+            red = Math.sin(frequency * item + 2 + phase) * width + center;
+            green = Math.sin(frequency * item + 0 + phase) * width + center;
+            blue = Math.sin(frequency * item + 4 + phase) * width + center;
+
+            return RGB2Color(red, green, blue);
+        }
+
+        function drawRouletteWheel() {
+            var canvas = document.getElementById("canvas");
+            if (canvas.getContext) {
+                var outsideRadius = 200;
+                var textRadius = 160;
+                var insideRadius = 125;
+
+                ctx = canvas.getContext("2d");
+                ctx.clearRect(0, 0, 500, 500);
+
+                ctx.strokeStyle = "black";
+                ctx.lineWidth = 3;
+
+                ctx.font = 'bold 19px Helvetica, Arial';
+
+                for (var i = 0; i < options.length; i++) {
+                    var angle = startAngle + i * arc;
+                    //ctx.fillStyle = colors[i];
+                    ctx.fillStyle = getColor(i, options.length);
+
+                    ctx.beginPath();
+                    ctx.arc(250, 250, outsideRadius, angle, angle + arc, false);
+                    ctx.arc(250, 250, insideRadius, angle + arc, angle, true);
+                    ctx.stroke();
+                    ctx.fill();
+
+                    ctx.save();
+                    ctx.shadowOffsetX = -1;
+                    ctx.shadowOffsetY = -1;
+                    ctx.shadowBlur = 0;
+                    //ctx.shadowColor   = "rgb(220,220,220)";
+                    ctx.fillStyle = "black";
+                    ctx.translate(250 + Math.cos(angle + arc / 2) * textRadius,
+                            250 + Math.sin(angle + arc / 2) * textRadius);
+                    ctx.rotate(angle + arc / 2 + Math.PI / 2);
+                    var text = options[i];
+                    ctx.fillText(text, -ctx.measureText(text).width / 2, 0);
+                    ctx.restore();
+                }
+
+                //Arrow
+                ctx.fillStyle = "black";
+                ctx.beginPath();
+                ctx.moveTo(250 - 4, 250 - (outsideRadius + 5));
+                ctx.lineTo(250 + 4, 250 - (outsideRadius + 5));
+                ctx.lineTo(250 + 4, 250 - (outsideRadius - 5));
+                ctx.lineTo(250 + 9, 250 - (outsideRadius - 5));
+                ctx.lineTo(250 + 0, 250 - (outsideRadius - 13));
+                ctx.lineTo(250 - 9, 250 - (outsideRadius - 5));
+                ctx.lineTo(250 - 4, 250 - (outsideRadius - 5));
+                ctx.lineTo(250 - 4, 250 - (outsideRadius + 5));
+                ctx.fill();
+            }
+        }
+
+        function spin() {
+            spinAngleStart = Math.random() * 10 + 10;
+            spinTime = 0;
+            spinTimeTotal = Math.random() * 3 + 4 * 1000;
+            rotateWheel();
+        }
+
+        function rotateWheel() {
+            spinTime += 30;
+            if (spinTime >= spinTimeTotal) {
+                stopRotateWheel();
+                return;
+            }
+            var spinAngle = spinAngleStart - easeOut(spinTime, 0, spinAngleStart, spinTimeTotal);
+            startAngle += (spinAngle * Math.PI / 180);
+            drawRouletteWheel();
+            spinTimeout = setTimeout('rotateWheel()', 30);
+        }
+
+        function stopRotateWheel() {
+            clearTimeout(spinTimeout);
+            var degrees = startAngle * 180 / Math.PI + 90;
+            var arcd = arc * 180 / Math.PI;
+            var index = Math.floor((360 - degrees % 360) / arcd);
+            ctx.save();
+            ctx.font = 'bold 30px Helvetica, Arial';
+            var text = options[index]
+            ctx.fillStyle = getColor(text - 1, options.length);
+            ctx.fillText(text, 250 - ctx.measureText(text).width / 2, 250 + 10);
+            ctx.restore();
+            fill_result(text);
+            window.location.href = "Roulette?res=" + result + "&bet=" + bet;
+        }
+
+        function easeOut(t, b, c, d) {
+            var ts = (t /= d) * t;
+            var tc = ts * t;
+            return b + c * (tc + -3 * ts + 3 * t);
+        }
+
+        function fill_result(ans_number)
+        {
+            var guess = document.getElementById("guess").value;
+            result = (guess == ans_number) ? "yes" : "no";
+            bet = document.getElementById("bet").value;
+        }
+
+        drawRouletteWheel();
+    </script>
+    <style>
+        body {
+            background: rgba(0,0,0,1);
+        }
+
+        input[type=number], textarea {
+            -webkit-transition: all 0.30s ease-in-out;
+            -moz-transition: all 0.30s ease-in-out;
+            -ms-transition: all 0.30s ease-in-out;
+            -o-transition: all 0.30s ease-in-out;
+            outline: none;
+            padding: 3px 0px 3px 3px;
+            margin: 5px 1px 3px 0px;
+            border: 1px solid #DDDDDD;
+            border-radius: 4px;
+            height:50px;
+            font-size:14pt;
+        }
+
+        input[type=number]:focus, textarea:focus {
+            box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+            padding: 3px 0px 3px 3px;
+            margin: 5px 1px 3px 0px;
+            border: 1px solid rgba(81, 203, 238, 1);
+        }
+
+        input[type=button] {
+            background: #3498db;
+            background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+            background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+            background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+            background-image: -o-linear-gradient(top, #3498db, #2980b9);
+            background-image: linear-gradient(to bottom, #3498db, #2980b9);
+            -webkit-border-radius: 16;
+            -moz-border-radius: 16;
+            border-radius: 16px;
+            -webkit-box-shadow: 0px 1px 3px #666666;
+            -moz-box-shadow: 0px 1px 3px #666666;
+            box-shadow: 0px 1px 3px #666666;
+            font-family: Courier New;
+            color: #ffffff;
+            font-size: 24px;
+            background: #3498db;
+            padding: 10px 20px 10px 20px;
+            text-decoration: none;
+        }
+
+        input[type=button] {
+            background: #3cb0fd;
+            background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+            background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+            background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+            background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+            background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+            text-decoration: none;
+        }
+
+    </style>
+</body>
 </html>

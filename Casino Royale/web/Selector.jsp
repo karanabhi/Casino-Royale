@@ -72,11 +72,18 @@
 
             %>
         </table>
-        <br/><br/><br/>
-        Points:<%=session.getAttribute("u_points").toString()%>
+        <br/><br/><br/>        
+        <%            if (session.getAttribute("u_stat") != null) {
+        %>
+        Status:<%=session.getAttribute("u_stat").toString()%>
+        <%
+            }
+        %>        
+        Current Pot:<%=session.getAttribute("u_points").toString()%>
         <%//IF NEEDED
             //    session.invalidate();
-        %>
+%>
+        <a href="logout">Exit</a>
 
 
 

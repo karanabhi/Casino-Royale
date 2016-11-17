@@ -70,7 +70,7 @@
         <br/><br/>
 
         <form method="post" action="/bJack">
-            <input type="hidden" value="<%=%>" name="data"/>
+            <input type="hidden" value="" name="data"/>
             <input type="submit" value="HIT" name="btn"/><br/><br/>
             <input type="submit" value="SETTLE" name="btn"/>
         </form>

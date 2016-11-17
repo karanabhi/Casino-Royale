@@ -59,7 +59,7 @@ public class DataAccessTemplate {
 
     public int updatePoint(int points, String id) {
 
-        query = "update leaderboard set points=(points+?) where _id=?";
+        query = "update leaderboard set points=? where _id=?";
         //if (stat == 'G') {
         return jdbcTemplateObject.update(query, new Object[]{points, id});
         //} else if (stat == 'F') {
