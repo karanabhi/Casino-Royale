@@ -1,0 +1,72 @@
+<html>
+<body>
+	<style>
+		body {
+			background: black;
+			color: white;
+			font-family: sans-serif;
+		}
+		table {
+		    border-collapse: collapse;
+		    border: solid white 1px;
+		}
+
+		th, td {
+		    text-align: left;
+		    padding: 8px;
+		}
+		tr:nth-child(even){background-color: #959e1b}
+		.btn {
+			  -webkit-border-radius: 6;
+			  -moz-border-radius: 6;
+			  border-radius: 6px;
+			  font-family: Georgia;
+			  color: #ffffff;
+			  font-size: 20px;
+			  background: rgba(202,214,39,0.8);/*#cad627;*/
+			  padding: 10px 20px 10px 20px;
+			  text-decoration: none;
+			}
+
+			.btn:hover {
+			  background: #d3e021;
+			  text-decoration: none;
+			}
+			.games {
+				margin: 2%;
+				margin-bottom: 4%;
+			}
+			.blinker {
+			  animation: blinker 1s linear infinite;
+			}
+
+			@keyframes blinker {  
+			  50% { opacity: 0; }
+			}
+	</style>
+	<center>
+		<div class="container">
+		    <span class="letter" style="font-size:70px;"><b>CASINO ROYALE</b><hr></span>
+		    <div class="blinker" style="font-size:30px;">
+		    	<span style="color:green;">YOU WON</span>
+		    	<span style="color:red;"></span>
+		    </div>
+		    <div>CURRENT POT : $ 500</div>
+		</div>
+		<div class="games">
+			<h2>Let's play a game!</h2>
+			<a href="" class="btn">Roulette</a>
+			<a href="" class="btn">Slot Machine</a>
+		</div>
+		<h3>LEADERBOARD</h3>
+	<table width="30%">
+		<tr><th>Rank</th><th>Username</th><th>Pot</th></tr>
+		<tr><td> 1 </td><td> </td><td> </td></tr>
+		<tr><td> 2 </td><td> </td><td> </td></tr>
+		<tr><td> 3 </td><td> </td><td> </td></tr>
+		<tr><td> 4 </td><td> </td><td> </td></tr>
+		<tr><td> 5 </td><td> </td><td> </td></tr>
+	</table>
+	</center>
+</body>
+</html>

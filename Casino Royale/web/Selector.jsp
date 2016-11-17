@@ -14,42 +14,91 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Home</title>
     </head>
     <body>
-        <div>Choose...</div>
-        <br/>
-        <a href="BlackJack.jsp">Black Jack</a><br/><br/>
-        <a href="Roulette_html.html">Roulette</a><br/><br/>
-        <form action="slots" method="post">
-            <input type="submit" name="slt" value="Slot Machine"/>
-        </form>
-        <br/><br/><br/>
-        Leader Board:
+        <style>
+            body {
+                background: black;
+                color: white;
+                font-family: sans-serif;
+            }
+            table {
+                border-collapse: collapse;
+                border: solid white 1px;
+            }
 
-        <table border="1">
-            <tr>
-                <th>
-                    Position
-                </th>
-                <th>
-                    User Name
-                </th>
-                <th>
-                    Points
-                </th>               
-            </tr>
+            th, td {
+                text-align: left;
+                padding: 8px;
+            }
+            tr:nth-child(even){background-color: #959e1b}
+            .btn {
+                -webkit-border-radius: 6;
+                -moz-border-radius: 6;
+                border-radius: 6px;
+                font-family: Georgia;
+                color: #ffffff;
+                font-size: 20px;
+                background: rgba(202,214,39,0.8);/*#cad627;*/
+                padding: 10px 20px 10px 20px;
+                text-decoration: none;
+            }
+
+            .btn:hover {
+                background: #d3e021;
+                text-decoration: none;
+            }
+            .games {
+                margin: 2%;
+                margin-bottom: 4%;
+            }
+            .blinker {
+                animation: blinker 1s linear infinite;
+            }
+
+            @keyframes blinker {  
+                50% { opacity: 0; }
+            }
+        </style>
+
+    <center>
+        <div class="container">
+            <span class="letter" style="font-size:70px;"><b>CASINO ROYALE</b><hr></span>
+            <div class="blinker" style="font-size:30px;">
 
 
-            <%
-                int x = 1;
+                <%            if (session.getAttribute("u_stat") != null) {
+                        if (session.getAttribute("u_stat").equals("YOU WIN!")) {
+                %>
+                <span style="color:green;"><%=session.getAttribute("u_stat").toString()%></span>
+                <%} else {
+                %> <span  style = "color:red;" ><%=session.getAttribute("u_stat").toString()%></span>
+                <%
+                        }//inner-if
+                    }//outer-if
+%>        
 
-                ApplicationContext contx = new ClassPathXmlApplicationContext("Beans.xml");
-                DataAccessTemplate dat = (DataAccessTemplate) contx.getBean("casinoJDBCTemplate");
+            </div>
+            <div>CURRENT POT : $ <%=session.getAttribute("u_points").toString()%></div>
+        </div>
+        <div class="games">
+            <h2>Let's play a game!</h2>
+            <a href="Roulette_html.html" class="btn">Roulette</a>
+            <a href="slots" class="btn">Slot Machine</a>
+        </div>
+        <h3>LEADERBOARD</h3>
+        <table width="30%">
+            <tr><th>Rank</th><th>Username</th><th>Pot</th></tr>
+                    <%
+                        int x = 1;
 
-                List<Casino> lst = dat.getLeaderboardData();
-                for (Casino c : lst) {
-            %>
+                        ApplicationContext contx = new ClassPathXmlApplicationContext("Beans.xml");
+                        DataAccessTemplate dat = (DataAccessTemplate) contx.getBean("casinoJDBCTemplate");
+
+                        List<Casino> lst = dat.getLeaderboardData();
+                        for (Casino c : lst) {
+                    %>
             <tr>            
                 <td>
                     <%=x++%>
@@ -65,22 +114,11 @@
                 }//for-loop
 
             %>
+
         </table>
-        <br/><br/><br/>        
-        <%            if (session.getAttribute("u_stat") != null) {
-        %>
-        Status:<%=session.getAttribute("u_stat").toString()%>
-        <%
-            }
-        %>        
-        Current Pot:<%=session.getAttribute("u_points").toString()%>
-        <%//IF NEEDED
-            //    session.invalidate();
-%>
-        <a href="logout">Exit</a>
 
-
-
-
-    </body>
+        <br/><br/>
+        <a href="logout" class='btn' style="background:rgba(255,255,255,0.85);color:black;">Exit</a>
+    </center>
+</body>
 </html>

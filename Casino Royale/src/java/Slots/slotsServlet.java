@@ -97,9 +97,9 @@ public class slotsServlet extends HttpServlet {
             ApplicationContext contx = new ClassPathXmlApplicationContext("Beans.xml");
             DataAccessTemplate dat = (DataAccessTemplate) contx.getBean("casinoJDBCTemplate");
             if (pts < 0) {
-                session.setAttribute("u_stat", "You LOST!!!");
+                session.setAttribute("u_stat", "YOU LOST!!!");
             } else {
-                session.setAttribute("u_stat", "You WIN!");
+                session.setAttribute("u_stat", "YOU WIN!");
             }
             pts += Integer.parseInt(session.getAttribute("u_points").toString());
             int stat = dat.updatePoint(pts, session.getAttribute("u_id").toString());
